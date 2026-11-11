@@ -7,5 +7,5 @@ cd "$SCRIPT_DIR"
 PORT="${PORT:-8003}"
 export PORT
 
-echo "Iniciando Link to QR en http://127.0.0.1:$PORT ..."
+echo "Starting Link to QR at http://127.0.0.1:$PORT ..."
 exec python3 app.py
