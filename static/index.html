@@ -1,39 +1,192 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Link to QR | Generador de Códigos QR</title>
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      var savedScheme = localStorage.getItem("color-scheme");
+      if (savedScheme === "light" || savedScheme === "dark") {
+        document.querySelector('meta[name="color-scheme"]').content = savedScheme;
+      }
+    } catch (e) {}
+  </script>
+  <title>Link to QR | QR Code Generator</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2'><rect x='3' y='3' width='7' height='7'/><rect x='14' y='3' width='7' height='7'/><rect x='14' y='14' width='7' height='7'/><rect x='3' y='14' width='7' height='7'/></svg>">
   <script src="/qrcode.min.js"></script>
   <style>
     :root {
-      --bg: #090a0b;
-      --card-bg: #121316;
-      --card-hover: #18191d;
-      --border: #23252a;
-      --border-hover: #34373e;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --text-dim: #6b7280;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --accent-bg: rgba(59, 130, 246, 0.12);
-      --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.12);
-      --danger: #ef4444;
-      --danger-bg: rgba(239, 68, 68, 0.12);
-      --badge-bg: #1e2025;
+      color-scheme: light dark;
+
+      /* Light tokens */
+      --bg-light: #f8fafc;
+      --surface-light: #ffffff;
+      --surface-hover-light: #f1f5f9;
+      --input-bg-light: #ffffff;
+      --border-light: #cbd5e1;
+      --border-hover-light: #94a3b8;
+      --text-main-light: #0f172a;
+      --text-muted-light: #475569;
+      --text-dim-light: #475569;
+      --accent-light: #2563eb;
+      --accent-hover-light: #1d4ed8;
+      --accent-bg-light: #eff6ff;
+      --success-light: #047857;
+      --danger-light: #b91c1c;
+      --danger-bg-light: #fef2f2;
+      --badge-bg-light: #f1f5f9;
+      --shadow-card-light: 0 4px 16px rgba(15, 23, 42, 0.06);
+
+      /* Dark tokens */
+      --bg-dark: #090a0b;
+      --surface-dark: #121316;
+      --surface-hover-dark: #18191d;
+      --input-bg-dark: #0d0e11;
+      --border-dark: #2c3038;
+      --border-hover-dark: #454a56;
+      --text-main-dark: #f3f4f6;
+      --text-muted-dark: #b4bcc8;
+      --text-dim-dark: #9ca3af;
+      --accent-dark: #3b82f6;
+      --accent-hover-dark: #2563eb;
+      --accent-bg-dark: rgba(59, 130, 246, 0.14);
+      --success-dark: #10b981;
+      --danger-dark: #f87171;
+      --danger-bg-dark: rgba(239, 68, 68, 0.14);
+      --badge-bg-dark: #1e2025;
+      --shadow-card-dark: 0 4px 20px rgba(0, 0, 0, 0.35);
+
+      /* Active semantic tokens (light default fallback) */
+      --bg: var(--bg-light);
+      --card-bg: var(--surface-light);
+      --card-hover: var(--surface-hover-light);
+      --input-bg: var(--input-bg-light);
+      --border: var(--border-light);
+      --border-hover: var(--border-hover-light);
+      --text-main: var(--text-main-light);
+      --text-muted: var(--text-muted-light);
+      --text-dim: var(--text-dim-light);
+      --accent: var(--accent-light);
+      --accent-hover: var(--accent-hover-light);
+      --accent-bg: var(--accent-bg-light);
+      --success: var(--success-light);
+      --danger: var(--danger-light);
+      --danger-bg: var(--danger-bg-light);
+      --badge-bg: var(--badge-bg-light);
+      --shadow-card: var(--shadow-card-light);
+
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
-      --shadow-card: 0 4px 20px rgba(0,0,0,0.3);
+
+      accent-color: var(--accent);
     }
 
-    * {
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: var(--bg-dark);
+        --card-bg: var(--surface-dark);
+        --card-hover: var(--surface-hover-dark);
+        --input-bg: var(--input-bg-dark);
+        --border: var(--border-dark);
+        --border-hover: var(--border-hover-dark);
+        --text-main: var(--text-main-dark);
+        --text-muted: var(--text-muted-dark);
+        --text-dim: var(--text-dim-dark);
+        --accent: var(--accent-dark);
+        --accent-hover: var(--accent-hover-dark);
+        --accent-bg: var(--accent-bg-dark);
+        --success: var(--success-dark);
+        --danger: var(--danger-dark);
+        --danger-bg: var(--danger-bg-dark);
+        --badge-bg: var(--badge-bg-dark);
+        --shadow-card: var(--shadow-card-dark);
+      }
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+      color-scheme: dark;
+      --bg: var(--bg-dark);
+      --card-bg: var(--surface-dark);
+      --card-hover: var(--surface-hover-dark);
+      --input-bg: var(--input-bg-dark);
+      --border: var(--border-dark);
+      --border-hover: var(--border-hover-dark);
+      --text-main: var(--text-main-dark);
+      --text-muted: var(--text-muted-dark);
+      --text-dim: var(--text-dim-dark);
+      --accent: var(--accent-dark);
+      --accent-hover: var(--accent-hover-dark);
+      --accent-bg: var(--accent-bg-dark);
+      --success: var(--success-dark);
+      --danger: var(--danger-dark);
+      --danger-bg: var(--danger-bg-dark);
+      --badge-bg: var(--badge-bg-dark);
+      --shadow-card: var(--shadow-card-dark);
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="light"]) {
+      color-scheme: light;
+      --bg: var(--bg-light);
+      --card-bg: var(--surface-light);
+      --card-hover: var(--surface-hover-light);
+      --input-bg: var(--input-bg-light);
+      --border: var(--border-light);
+      --border-hover: var(--border-hover-light);
+      --text-main: var(--text-main-light);
+      --text-muted: var(--text-muted-light);
+      --text-dim: var(--text-dim-light);
+      --accent: var(--accent-light);
+      --accent-hover: var(--accent-hover-light);
+      --accent-bg: var(--accent-bg-light);
+      --success: var(--success-light);
+      --danger: var(--danger-light);
+      --danger-bg: var(--danger-bg-light);
+      --badge-bg: var(--badge-bg-light);
+      --shadow-card: var(--shadow-card-light);
+    }
+
+    @supports (color: light-dark(white, black)) {
+      :root {
+        --bg: light-dark(var(--bg-light), var(--bg-dark));
+        --card-bg: light-dark(var(--surface-light), var(--surface-dark));
+        --card-hover: light-dark(var(--surface-hover-light), var(--surface-hover-dark));
+        --input-bg: light-dark(var(--input-bg-light), var(--input-bg-dark));
+        --border: light-dark(var(--border-light), var(--border-dark));
+        --border-hover: light-dark(var(--border-hover-light), var(--border-hover-dark));
+        --text-main: light-dark(var(--text-main-light), var(--text-main-dark));
+        --text-muted: light-dark(var(--text-muted-light), var(--text-muted-dark));
+        --text-dim: light-dark(var(--text-dim-light), var(--text-dim-dark));
+        --accent: light-dark(var(--accent-light), var(--accent-dark));
+        --accent-hover: light-dark(var(--accent-hover-light), var(--accent-hover-dark));
+        --accent-bg: light-dark(var(--accent-bg-light), var(--accent-bg-dark));
+        --success: light-dark(var(--success-light), var(--success-dark));
+        --danger: light-dark(var(--danger-light), var(--danger-dark));
+        --danger-bg: light-dark(var(--danger-bg-light), var(--danger-bg-dark));
+        --badge-bg: light-dark(var(--badge-bg-light), var(--badge-bg-dark));
+        --shadow-card: light-dark(var(--shadow-card-light), var(--shadow-card-dark));
+      }
+    }
+
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    .visually-hidden:where(:not(:focus-within, :active)) {
+      position: absolute !important;
+      clip-path: inset(50%) !important;
+      overflow: hidden !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      border: 0 !important;
+      white-space: nowrap !important;
     }
 
     body {
@@ -45,6 +198,11 @@
       flex-direction: column;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+    }
+
+    :where(a:any-link, button, input, select):focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
     }
 
     header {
@@ -62,14 +220,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      text-decoration: none;
-      color: inherit;
     }
 
     .brand-logo {
@@ -80,8 +238,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      color: #ffffff;
       box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+      flex-shrink: 0;
     }
 
     .brand-title {
@@ -97,26 +256,74 @@
       color: var(--text-muted);
       padding: 0.15rem 0.5rem;
       border-radius: 9999px;
-      margin-left: 0.25rem;
     }
 
-    .hub-link {
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    .header-btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 0.4rem;
+      min-block-size: 36px;
+      min-inline-size: 36px;
       color: var(--text-muted);
+      background: transparent;
       text-decoration: none;
       font-size: 0.8125rem;
+      font-weight: 500;
+      font-family: inherit;
       padding: 0.4rem 0.75rem;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
-      transition: all 0.15s ease;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
 
-    .hub-link:hover {
+    .header-btn:hover {
       background: var(--card-hover);
       color: var(--text-main);
       border-color: var(--border-hover);
+    }
+
+    /* Theme toggle icon branching driven by meta[name="color-scheme"] + OS fallback */
+    .theme-state-dark {
+      display: none;
+    }
+
+    .theme-state-light {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .theme-state-light {
+        display: none;
+      }
+      .theme-state-dark {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-state-light {
+      display: none;
+    }
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-state-dark {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="light"]) .theme-state-light {
+      display: inline-flex;
+      align-items: center;
+    }
+    :root:has(> head > meta[name="color-scheme"][content="light"]) .theme-state-dark {
+      display: none;
     }
 
     main {
@@ -129,7 +336,7 @@
 
     .hero {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2.25rem;
     }
 
     .hero h1 {
@@ -169,14 +376,30 @@
       margin-bottom: 1.25rem;
     }
 
-    .form-label {
+    .form-label-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-label {
+      display: block;
       font-size: 0.85rem;
       font-weight: 600;
       color: var(--text-muted);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .form-label-row .form-label {
+      margin-bottom: 0;
+    }
+
+    .char-count {
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: var(--text-dim);
     }
 
     .input-wrapper {
@@ -187,25 +410,24 @@
 
     .text-input {
       width: 100%;
-      background: #0d0e11;
+      min-block-size: 46px;
+      background: var(--input-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       color: var(--text-main);
-      font-size: 0.95rem;
-      padding: 0.75rem 4.5rem 0.75rem 0.9rem;
-      outline: none;
+      font-size: max(1rem, 1em);
+      padding: 0.65rem 6.25rem 0.65rem 0.9rem;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
       font-family: inherit;
     }
 
     .text-input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
 
     .input-actions {
       position: absolute;
-      right: 0.4rem;
+      right: 0.35rem;
       display: flex;
       align-items: center;
       gap: 0.25rem;
@@ -213,25 +435,29 @@
 
     .btn-ghost-sm {
       background: transparent;
-      border: none;
+      border: 1px solid transparent;
       color: var(--text-muted);
       cursor: pointer;
-      padding: 0.35rem 0.5rem;
+      min-block-size: 32px;
+      min-inline-size: 32px;
+      padding: 0.3rem 0.55rem;
       border-radius: var(--radius-sm);
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 500;
+      font-family: inherit;
       display: inline-flex;
       align-items: center;
-      gap: 0.2rem;
-      transition: all 0.15s ease;
+      justify-content: center;
+      gap: 0.25rem;
+      transition: background-color 0.15s ease, color 0.15s ease;
     }
 
     .btn-ghost-sm:hover {
-      background: var(--border);
+      background: var(--badge-bg);
       color: var(--text-main);
     }
 
-    /* Opciones avanzadas / colapsable */
+    /* Customization options */
     .options-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -241,34 +467,58 @@
       border-top: 1px solid var(--border);
     }
 
-    .select-input, .color-picker-input {
+    @media (max-width: 480px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .select-input {
       width: 100%;
-      background: #0d0e11;
+      min-block-size: 40px;
+      background: var(--input-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       color: var(--text-main);
       padding: 0.5rem 0.75rem;
-      font-size: 0.8125rem;
-      outline: none;
+      font-size: 0.875rem;
+      font-family: inherit;
+    }
+
+    .color-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.45rem;
+    }
+
+    .color-header .form-label {
+      margin-bottom: 0;
     }
 
     .color-picker-row {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     .color-swatch {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
-      padding: 0;
+      padding: 2px;
       cursor: pointer;
-      background: none;
+      background: var(--input-bg);
     }
 
-    /* Historial */
+    .color-hex {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8125rem;
+      color: var(--text-dim);
+    }
+
+    /* Recent links history */
     .history-section {
       margin-top: 1.5rem;
       padding-top: 1.25rem;
@@ -280,7 +530,7 @@
       color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -289,20 +539,25 @@
     .history-chips {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.45rem;
     }
 
     .history-item {
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #0d0e11;
+      gap: 0.5rem;
+      background: var(--input-bg);
       border: 1px solid var(--border);
-      padding: 0.4rem 0.6rem;
+      padding: 0.5rem 0.75rem;
+      min-block-size: 38px;
       border-radius: var(--radius-sm);
       font-size: 0.8125rem;
+      font-family: inherit;
+      text-align: left;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
       color: var(--text-muted);
       overflow: hidden;
     }
@@ -317,10 +572,17 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 85%;
+      flex: 1;
+      min-width: 0;
     }
 
-    /* Contenedor del QR */
+    .history-arrow {
+      font-size: 0.8rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* QR preview area */
     .preview-card {
       display: flex;
       flex-direction: column;
@@ -333,13 +595,15 @@
       background: #ffffff;
       padding: 1.5rem;
       border-radius: var(--radius-lg);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
       margin-bottom: 1.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
       min-width: 260px;
       min-height: 260px;
+      max-width: 100%;
       transition: transform 0.2s ease;
     }
 
@@ -351,9 +615,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      max-width: 100%;
     }
 
-    #qrcode img, #qrcode canvas {
+    #qrcode img,
+    #qrcode canvas {
       max-width: 100%;
       height: auto;
       display: block;
@@ -366,31 +632,59 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
-      color: #9ca3af;
+      color: #475569;
       text-align: center;
-      padding: 2rem;
+      padding: 1.5rem;
     }
 
     .qr-placeholder svg {
-      opacity: 0.4;
+      opacity: 0.5;
     }
 
     .qr-placeholder span {
-      font-size: 0.85rem;
-      max-width: 180px;
+      font-size: 0.875rem;
+      max-width: 190px;
     }
 
-    /* Acciones del QR */
+    .qr-error {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--danger);
+      background: var(--danger-bg);
+      border: 1px solid var(--danger);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .qr-error[hidden] {
+      display: none;
+    }
+
+    /* QR actions */
     .qr-actions {
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
       width: 100%;
       max-width: 320px;
+      transition: opacity 0.15s ease;
+    }
+
+    .qr-actions[inert] {
+      opacity: 0.5;
+      cursor: default;
+      user-select: none;
     }
 
     .btn-primary {
       width: 100%;
+      min-block-size: 42px;
       background: var(--accent);
       color: #ffffff;
       border: none;
@@ -398,12 +692,13 @@
       border-radius: var(--radius-sm);
       font-size: 0.875rem;
       font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      transition: background 0.15s ease, transform 0.1s ease;
+      transition: background-color 0.15s ease, transform 0.1s ease;
     }
 
     .btn-primary:hover {
@@ -421,6 +716,7 @@
     }
 
     .btn-secondary {
+      min-block-size: 38px;
       background: var(--badge-bg);
       color: var(--text-main);
       border: 1px solid var(--border);
@@ -428,13 +724,14 @@
       border-radius: var(--radius-sm);
       font-size: 0.8125rem;
       font-weight: 500;
+      font-family: inherit;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.4rem;
       text-decoration: none;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
     }
 
     .btn-secondary:hover {
@@ -442,31 +739,49 @@
       border-color: var(--border-hover);
     }
 
-    /* Toast */
-    .toast {
+    .btn-secondary[hidden] {
+      display: none;
+    }
+
+    /* Accessible toast region */
+    .toast-region {
       position: fixed;
-      bottom: 2rem;
+      bottom: 1.75rem;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: #1f2937;
-      color: #f9fafb;
-      border: 1px solid #374151;
+      transform: translateX(-50%);
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-hover);
       padding: 0.65rem 1.25rem;
       border-radius: 9999px;
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
       opacity: 0;
-      pointer-events: none;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 100;
+      transform: translateY(16px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .toast.show {
-      transform: translateX(-50%) translateY(0);
       opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .toast-icon {
+      color: var(--success);
+      flex-shrink: 0;
+    }
+
+    .toast.is-error .toast-icon {
+      color: var(--danger);
     }
 
     footer {
@@ -477,6 +792,40 @@
       color: var(--text-dim);
       text-align: center;
     }
+
+    @media (pointer: coarse) {
+      .header-btn,
+      .btn-ghost-sm,
+      .btn-secondary,
+      .btn-primary,
+      .history-item,
+      .select-input {
+        min-block-size: 44px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+      .qr-box-wrapper:hover {
+        transform: none;
+      }
+    }
+
+    @media (forced-colors: active) {
+      .card,
+      .qr-box-wrapper,
+      .header-btn,
+      .btn-secondary,
+      .btn-primary,
+      .toast {
+        border: 1px solid ButtonText;
+      }
+    }
   </style>
 </head>
 <body>
@@ -484,8 +833,8 @@
   <header>
     <div class="header-inner">
       <div class="brand">
-        <div class="brand-logo">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="3" y="3" width="7" height="7"></rect>
             <rect x="14" y="3" width="7" height="7"></rect>
             <rect x="14" y="14" width="7" height="7"></rect>
@@ -493,168 +842,210 @@
           </svg>
         </div>
         <div class="brand-title">Link to QR</div>
-        <span class="brand-badge">Herramienta</span>
+        <span class="brand-badge">Tool</span>
       </div>
-      <a href="http://127.0.0.1:7777" class="hub-link" title="Volver al panel general">
-        <span>⚡ Volver al Hub</span>
-      </a>
+      <div class="header-actions">
+        <button type="button" id="btnThemeToggle" class="header-btn" title="Toggle light/dark theme">
+          <span class="theme-state-light">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span class="visually-hidden">Switch to dark theme</span>
+          </span>
+          <span class="theme-state-dark">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <span class="visually-hidden">Switch to light theme</span>
+          </span>
+        </button>
+        <a href="http://127.0.0.1:7777" class="header-btn">
+          <span aria-hidden="true">⚡</span>
+          <span>Back to Hub</span>
+        </a>
+      </div>
     </div>
   </header>
 
   <main>
     <section class="hero">
-      <h1>Generador Instantáneo de QR</h1>
-      <p>Pega cualquier enlace o texto para generar, copiar y descargar tu código QR al instante.</p>
+      <h1>Instant QR Code Generator</h1>
+      <p>Paste any link or text to generate, copy, and download your QR code instantaneously.</p>
     </section>
 
     <div class="app-grid">
-      <!-- Columna Izquierda: Entrada y Opciones -->
+      <!-- Left Column: Input & Customization -->
       <div class="card">
-        <div class="form-group">
-          <label class="form-label" for="linkInput">
-            <span>Enlace o Texto</span>
-            <span id="charCount" style="font-weight: 400; font-size: 0.75rem;">0 caracteres</span>
-          </label>
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="linkInput"
-              class="text-input"
-              placeholder="https://ejemplo.com..."
-              autocomplete="off"
-              autofocus
-            />
-            <div class="input-actions">
-              <button class="btn-ghost-sm" id="btnPaste" title="Pegar desde el portapapeles">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                </svg>
-                Pegar
-              </button>
-              <button class="btn-ghost-sm" id="btnClear" title="Limpiar" style="display: none;">
-                ✕
-              </button>
+        <form id="qrForm" action="#" novalidate>
+          <div class="form-group">
+            <div class="form-label-row">
+              <label class="form-label" for="linkInput">Link or Text</label>
+              <span id="charCount" class="char-count" aria-live="off">0 characters</span>
             </div>
-          </div>
-        </div>
-
-        <div class="options-grid">
-          <div>
-            <label class="form-label" for="sizeSelect">Tamaño de exportación</label>
-            <select id="sizeSelect" class="select-input">
-              <option value="256">256 x 256 px (Estándar)</option>
-              <option value="384" selected>384 x 384 px (Mediano)</option>
-              <option value="512">512 x 512 px (Alta Nitidez)</option>
-              <option value="1024">1024 x 1024 px (Ultra HD)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="form-label" for="errorLevelSelect">Corrección de error</label>
-            <select id="errorLevelSelect" class="select-input">
-              <option value="L">L (Baja - 7%)</option>
-              <option value="M">M (Media - 15%)</option>
-              <option value="Q">Q (Alta - 25%)</option>
-              <option value="H" selected>H (Máxima - 30%)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="form-label" for="fgColor">Color del QR</label>
-            <div class="color-picker-row">
-              <input type="color" id="fgColor" value="#000000" class="color-swatch">
-              <span id="fgColorLabel" style="font-family: monospace; font-size: 0.8rem; color: var(--text-dim);">#000000</span>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="linkInput"
+                name="text"
+                class="text-input"
+                placeholder="https://example.com"
+                autocomplete="url"
+                autocapitalize="none"
+                autocorrect="off"
+                spellcheck="false"
+                enterkeyhint="done"
+                autofocus
+              >
+              <div class="input-actions">
+                <button type="button" class="btn-ghost-sm" id="btnPaste">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                  </svg>
+                  <span>Paste</span>
+                </button>
+                <button type="button" class="btn-ghost-sm" id="btnClear" aria-label="Clear link input" hidden>
+                  <span aria-hidden="true">✕</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div>
-            <label class="form-label" for="bgColor">Color de fondo</label>
-            <div class="color-picker-row">
-              <input type="color" id="bgColor" value="#ffffff" class="color-swatch">
-              <span id="bgColorLabel" style="font-family: monospace; font-size: 0.8rem; color: var(--text-dim);">#ffffff</span>
+          <div class="options-grid">
+            <div>
+              <label class="form-label" for="sizeSelect">Export size</label>
+              <select id="sizeSelect" name="size" class="select-input">
+                <option value="256">256 × 256 px (Standard)</option>
+                <option value="384" selected>384 × 384 px (Medium)</option>
+                <option value="512">512 × 512 px (High Clarity)</option>
+                <option value="1024">1024 × 1024 px (Ultra HD)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="form-label" for="errorLevelSelect">Error correction</label>
+              <select id="errorLevelSelect" name="errorLevel" class="select-input">
+                <option value="L">L (Low - 7%)</option>
+                <option value="M">M (Medium - 15%)</option>
+                <option value="Q">Q (Quartile - 25%)</option>
+                <option value="H" selected>H (High - 30%)</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="color-header">
+                <label class="form-label" for="fgColor">QR Color</label>
+              </div>
+              <div class="color-picker-row">
+                <input type="color" id="fgColor" name="fgColor" value="#000000" class="color-swatch">
+                <span id="fgColorLabel" class="color-hex">#000000</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="color-header">
+                <label class="form-label" for="bgColor">Background Color</label>
+                <button type="button" class="btn-ghost-sm" id="btnResetColors" aria-label="Reset colors to black and white">Reset</button>
+              </div>
+              <div class="color-picker-row">
+                <input type="color" id="bgColor" name="bgColor" value="#ffffff" class="color-swatch">
+                <span id="bgColorLabel" class="color-hex">#ffffff</span>
+              </div>
             </div>
           </div>
-        </div>
+        </form>
 
-        <div class="history-section" id="historySection" style="display: none;">
+        <section class="history-section" id="historySection" aria-label="Recent links" hidden>
           <div class="history-title">
-            <span>Enlaces recientes</span>
-            <button class="btn-ghost-sm" id="btnClearHistory" style="padding: 0;">Borrar</button>
+            <span>Recent links</span>
+            <button type="button" class="btn-ghost-sm" id="btnClearHistory">Clear</button>
           </div>
           <div class="history-chips" id="historyChips"></div>
-        </div>
+        </section>
       </div>
 
-      <!-- Columna Derecha: Previsualización y Descargas -->
+      <!-- Right Column: Preview & Export Actions -->
       <div class="card preview-card">
         <div class="qr-box-wrapper" id="qrWrapper">
           <div id="qrcode">
             <div class="qr-placeholder" id="qrPlaceholder">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <rect x="3" y="3" width="7" height="7"></rect>
                 <rect x="14" y="3" width="7" height="7"></rect>
                 <rect x="14" y="14" width="7" height="7"></rect>
                 <rect x="3" y="14" width="7" height="7"></rect>
               </svg>
-              <span>Escribe o pega un enlace para generar el QR</span>
+              <span>Type or paste a link to generate a QR code</span>
             </div>
           </div>
         </div>
 
-        <div class="qr-actions" id="qrActions" style="opacity: 0.5; pointer-events: none;">
-          <button class="btn-primary" id="btnCopyImage">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div id="qrError" class="qr-error" role="alert" hidden></div>
+
+        <div class="qr-actions" id="qrActions" inert>
+          <button type="button" class="btn-primary" id="btnCopyImage">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
-            Copiar Imagen al Portapapeles
+            <span>Copy Image to Clipboard</span>
           </button>
 
           <div class="btn-row">
-            <button class="btn-secondary" id="btnDownloadPNG">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button type="button" class="btn-secondary" id="btnDownloadPNG">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
               </svg>
-              Descargar PNG
+              <span>Download PNG</span>
             </button>
-            <button class="btn-secondary" id="btnDownloadSVG">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button type="button" class="btn-secondary" id="btnDownloadSVG">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
                 <polyline points="2 17 12 22 22 17"></polyline>
                 <polyline points="2 12 12 17 22 12"></polyline>
               </svg>
-              Descargar SVG
+              <span>Download SVG</span>
             </button>
           </div>
 
-          <a href="#" target="_blank" class="btn-secondary" id="btnTestLink" style="display: none;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="btn-secondary" id="btnTestLink" hidden>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
               <line x1="10" y1="14" x2="21" y2="3"></line>
             </svg>
-            Abrir enlace en nueva pestaña
+            <span>Open link in new tab</span>
           </a>
         </div>
       </div>
     </div>
   </main>
 
-  <div class="toast" id="toast">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
-      <polyline points="20 6 9 17 4 12"></polyline>
-    </svg>
-    <span id="toastMessage">Acción completada</span>
+  <div class="toast-region" role="region" aria-label="Notifications">
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+      <svg class="toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="toastMessage"></span>
+    </div>
   </div>
 
   <footer>
-    Link to QR &bull; Herramienta integrada en Tools Hub
+    Link to QR &bull; Powered by Tools Hub
   </footer>
 
   <script>
+    const qrForm = document.getElementById('qrForm');
     const linkInput = document.getElementById('linkInput');
     const charCount = document.getElementById('charCount');
     const btnPaste = document.getElementById('btnPaste');
@@ -665,8 +1056,10 @@
     const bgColor = document.getElementById('bgColor');
     const fgColorLabel = document.getElementById('fgColorLabel');
     const bgColorLabel = document.getElementById('bgColorLabel');
+    const btnResetColors = document.getElementById('btnResetColors');
     const qrcodeContainer = document.getElementById('qrcode');
     const qrPlaceholder = document.getElementById('qrPlaceholder');
+    const qrError = document.getElementById('qrError');
     const qrActions = document.getElementById('qrActions');
     const qrWrapper = document.getElementById('qrWrapper');
     const btnCopyImage = document.getElementById('btnCopyImage');
@@ -678,18 +1071,81 @@
     const historySection = document.getElementById('historySection');
     const historyChips = document.getElementById('historyChips');
     const btnClearHistory = document.getElementById('btnClearHistory');
+    const btnThemeToggle = document.getElementById('btnThemeToggle');
+    const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
 
     let qrInstance = null;
     let toastTimeout = null;
-    const STORAGE_KEY = 'link_to_qr_history';
+    let historyDebounce = null;
+    let lastToastText = '';
+    const STORAGE_KEY_HISTORY = 'link_to_qr_history';
+    const STORAGE_KEY_SCHEME = 'color-scheme';
 
-    function showToast(msg) {
+    // --- Theme Management (two-state override aligned with OS preference) ---
+    function getSystemScheme() {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyScheme(scheme) {
+      if (colorSchemeMeta) {
+        colorSchemeMeta.content = scheme === 'light' || scheme === 'dark' ? scheme : 'light dark';
+      }
+    }
+
+    btnThemeToggle.addEventListener('click', () => {
+      let currentStored = null;
+      try {
+        currentStored = localStorage.getItem(STORAGE_KEY_SCHEME);
+      } catch (e) {}
+
+      const systemScheme = getSystemScheme();
+      const renderedScheme = currentStored === 'light' || currentStored === 'dark' ? currentStored : systemScheme;
+      const targetScheme = renderedScheme === 'dark' ? 'light' : 'dark';
+
+      try {
+        if (targetScheme === systemScheme) {
+          localStorage.removeItem(STORAGE_KEY_SCHEME);
+          applyScheme('light dark');
+        } else {
+          localStorage.setItem(STORAGE_KEY_SCHEME, targetScheme);
+          applyScheme(targetScheme);
+        }
+      } catch (e) {
+        applyScheme(targetScheme === systemScheme ? 'light dark' : targetScheme);
+      }
+    });
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === STORAGE_KEY_SCHEME) {
+        applyScheme(e.newValue === 'light' || e.newValue === 'dark' ? e.newValue : 'light dark');
+      }
+    });
+
+    // --- Toast Notifications ---
+    function showToast(msg, isError = false) {
       if (toastTimeout) clearTimeout(toastTimeout);
-      toastMessage.textContent = msg;
+
+      let text = msg;
+      if (text === lastToastText) {
+        text += '\u00A0';
+      }
+      lastToastText = msg;
+
+      toast.classList.toggle('is-error', isError);
+      toastMessage.textContent = '';
       toast.classList.add('show');
+      requestAnimationFrame(() => {
+        toastMessage.textContent = text;
+      });
+
       toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
-      }, 2500);
+        setTimeout(() => {
+          if (!toast.classList.contains('show')) {
+            toastMessage.textContent = '';
+          }
+        }, 250);
+      }, 2600);
     }
 
     function getCorrectionLevel(levelStr) {
@@ -702,23 +1158,33 @@
       }
     }
 
-    function generateQR() {
+    function resetPreviewToEmpty() {
+      qrcodeContainer.innerHTML = '';
+      qrcodeContainer.appendChild(qrPlaceholder);
+      qrActions.inert = true;
+      btnTestLink.hidden = true;
+      btnTestLink.href = '#';
+      qrWrapper.style.backgroundColor = '#ffffff';
+      qrError.hidden = true;
+      qrError.textContent = '';
+      qrInstance = null;
+    }
+
+    function generateQR(commitHistory = false) {
       const text = linkInput.value.trim();
-      charCount.textContent = `${text.length} caracter${text.length === 1 ? '' : 'es'}`;
-      btnClear.style.display = text ? 'inline-flex' : 'none';
+      charCount.textContent = `${text.length} character${text.length === 1 ? '' : 's'}`;
+      btnClear.hidden = !text;
+
+      if (historyDebounce) {
+        clearTimeout(historyDebounce);
+        historyDebounce = null;
+      }
 
       if (!text) {
-        qrcodeContainer.innerHTML = '';
-        qrcodeContainer.appendChild(qrPlaceholder);
-        qrActions.style.opacity = '0.5';
-        qrActions.style.pointerEvents = 'none';
-        btnTestLink.style.display = 'none';
-        qrWrapper.style.backgroundColor = '#ffffff';
-        qrInstance = null;
+        resetPreviewToEmpty();
         return;
       }
 
-      // Configuración de render
       const size = parseInt(sizeSelect.value, 10) || 384;
       const fg = fgColor.value;
       const bg = bgColor.value;
@@ -726,6 +1192,8 @@
 
       qrWrapper.style.backgroundColor = bg;
       qrcodeContainer.innerHTML = '';
+      qrError.hidden = true;
+      qrError.textContent = '';
 
       try {
         qrInstance = new QRCode(qrcodeContainer, {
@@ -737,20 +1205,31 @@
           correctLevel: correctLevel
         });
 
-        qrActions.style.opacity = '1';
-        qrActions.style.pointerEvents = 'auto';
-
-        // Probar enlace
-        if (text.startsWith('http://') || text.startsWith('https://')) {
-          btnTestLink.href = text;
-          btnTestLink.style.display = 'inline-flex';
-        } else {
-          btnTestLink.style.display = 'none';
+        const img = qrcodeContainer.querySelector('img');
+        if (img) {
+          img.alt = 'Generated QR code';
         }
 
-        saveToHistory(text);
+        qrActions.inert = false;
+
+        if (/^https?:\/\//i.test(text)) {
+          btnTestLink.href = text;
+          btnTestLink.hidden = false;
+        } else {
+          btnTestLink.hidden = true;
+          btnTestLink.href = '#';
+        }
+
+        if (commitHistory) {
+          saveToHistory(text);
+        } else {
+          historyDebounce = setTimeout(() => saveToHistory(text), 800);
+        }
       } catch (err) {
-        console.error('Error generando QR:', err);
+        console.error('QR generation error:', err);
+        resetPreviewToEmpty();
+        qrError.textContent = 'Text is too long for the selected error correction level. Try shortening it or selecting a lower level (L or M).';
+        qrError.hidden = false;
       }
     }
 
@@ -778,28 +1257,38 @@
           }
         }
       }
-      svg += `</svg>`;
+      svg += '</svg>';
       return svg;
     }
 
     function sanitizeFilename(text) {
       return text.replace(/https?:\/\//i, '')
-                 .replace(/[^a-z0-9_-]/gi, '_')
-                 .substring(0, 30) || 'qr_code';
+        .replace(/[^a-z0-9_-]/gi, '_')
+        .substring(0, 30) || 'qr_code';
     }
 
-    // Copiar imagen
+    // Prevent accidental form reload on Enter
+    qrForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      generateQR(true);
+    });
+
+    // Copy PNG image to clipboard
     btnCopyImage.addEventListener('click', async () => {
+      const text = linkInput.value.trim();
+      if (text) saveToHistory(text);
+
       try {
+        if (!navigator.clipboard || typeof ClipboardItem === 'undefined') {
+          throw new Error('Clipboard image API unavailable');
+        }
+
         const canvas = qrcodeContainer.querySelector('canvas');
         if (canvas) {
-          canvas.toBlob(async (blob) => {
-            if (!blob) throw new Error("No se pudo obtener el blob");
-            await navigator.clipboard.write([
-              new ClipboardItem({ 'image/png': blob })
-            ]);
-            showToast('¡Imagen QR copiada al portapapeles!');
-          });
+          const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+          if (!blob) throw new Error('Could not convert QR canvas to PNG');
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          showToast('QR image copied to clipboard!');
           return;
         }
 
@@ -807,20 +1296,20 @@
         if (img && img.src) {
           const res = await fetch(img.src);
           const blob = await res.blob();
-          await navigator.clipboard.write([
-            new ClipboardItem({ 'image/png': blob })
-          ]);
-          showToast('¡Imagen QR copiada al portapapeles!');
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          showToast('QR image copied to clipboard!');
         }
       } catch (err) {
-        console.warn('Error al copiar imagen:', err);
-        showToast('No se pudo copiar automáticamente. Usa Descargar PNG.');
+        console.warn('Could not copy image:', err);
+        showToast('Automatic copy unavailable. Use Download PNG instead.', true);
       }
     });
 
-    // Descargar PNG
+    // Download PNG
     btnDownloadPNG.addEventListener('click', () => {
       const text = linkInput.value.trim();
+      if (!text) return;
+      saveToHistory(text);
       const filename = `${sanitizeFilename(text)}.png`;
       const canvas = qrcodeContainer.querySelector('canvas');
       if (canvas) {
@@ -828,7 +1317,7 @@
         a.href = canvas.toDataURL('image/png');
         a.download = filename;
         a.click();
-        showToast('Descarga PNG completada');
+        showToast('PNG download started');
       } else {
         const img = qrcodeContainer.querySelector('img');
         if (img && img.src) {
@@ -836,17 +1325,19 @@
           a.href = img.src;
           a.download = filename;
           a.click();
-          showToast('Descarga PNG completada');
+          showToast('PNG download started');
         }
       }
     });
 
-    // Descargar SVG
+    // Download SVG
     btnDownloadSVG.addEventListener('click', () => {
       const text = linkInput.value.trim();
+      if (!text) return;
+      saveToHistory(text);
       const svgStr = getSVGContent();
       if (!svgStr) {
-        showToast('No se pudo generar el formato SVG');
+        showToast('Could not generate SVG output', true);
         return;
       }
       const filename = `${sanitizeFilename(text)}.svg`;
@@ -857,50 +1348,73 @@
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
-      showToast('Descarga SVG completada');
+      showToast('SVG download started');
     });
 
-    // Pegar desde portapapeles
+    btnTestLink.addEventListener('click', () => {
+      const text = linkInput.value.trim();
+      if (text) saveToHistory(text);
+    });
+
+    // Paste from clipboard
     btnPaste.addEventListener('click', async () => {
       try {
         const text = await navigator.clipboard.readText();
         if (text) {
           linkInput.value = text;
-          generateQR();
-          showToast('Enlace pegado');
+          generateQR(true);
+          showToast('Link pasted');
+        } else {
+          showToast('Clipboard is empty', true);
         }
       } catch (e) {
         linkInput.focus();
-        showToast('Presiona Ctrl+V para pegar');
+        showToast('Press Ctrl+V to paste');
       }
     });
 
-    // Limpiar input
+    // Clear input
     btnClear.addEventListener('click', () => {
       linkInput.value = '';
       linkInput.focus();
       generateQR();
     });
 
-    // Escuchadores de cambio
-    linkInput.addEventListener('input', generateQR);
-    sizeSelect.addEventListener('change', generateQR);
-    errorLevelSelect.addEventListener('change', generateQR);
+    // Reset colors
+    btnResetColors.addEventListener('click', () => {
+      fgColor.value = '#000000';
+      bgColor.value = '#ffffff';
+      fgColorLabel.textContent = '#000000';
+      bgColorLabel.textContent = '#ffffff';
+      if (linkInput.value.trim()) {
+        generateQR();
+      }
+      showToast('Colors reset');
+    });
+
+    // Input & option listeners
+    linkInput.addEventListener('input', () => generateQR(false));
+    linkInput.addEventListener('blur', () => {
+      const text = linkInput.value.trim();
+      if (text && qrInstance) saveToHistory(text);
+    });
+    sizeSelect.addEventListener('change', () => generateQR(false));
+    errorLevelSelect.addEventListener('change', () => generateQR(false));
 
     fgColor.addEventListener('input', (e) => {
       fgColorLabel.textContent = e.target.value;
-      generateQR();
+      generateQR(false);
     });
 
     bgColor.addEventListener('input', (e) => {
       bgColorLabel.textContent = e.target.value;
-      generateQR();
+      generateQR(false);
     });
 
-    // Historial
+    // --- Recent Links History ---
     function getHistory() {
       try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        return JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY)) || [];
       } catch {
         return [];
       }
@@ -908,55 +1422,69 @@
 
     function saveToHistory(text) {
       if (!text || text.length < 3) return;
-      let list = getHistory().filter(item => item !== text);
-      list.unshift(text);
-      list = list.slice(0, 5);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-      renderHistory();
+      try {
+        let list = getHistory().filter((item) => item !== text);
+        list.unshift(text);
+        list = list.slice(0, 5);
+        localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(list));
+        renderHistory();
+      } catch (e) {}
     }
 
     function renderHistory() {
       const list = getHistory();
       if (list.length === 0) {
-        historySection.style.display = 'none';
+        historySection.hidden = true;
+        historyChips.replaceChildren();
         return;
       }
-      historySection.style.display = 'block';
-      historyChips.innerHTML = list.map(item => `
-        <div class="history-item" onclick="selectHistory('${escapeAttr(item)}')">
-          <span class="history-text">${escapeHtml(item)}</span>
-          <span style="font-size: 0.75rem; color: var(--accent);">&#8629;</span>
-        </div>
-      `).join('');
+      historySection.hidden = false;
+
+      const fragment = document.createDocumentFragment();
+      for (const item of list) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'history-item';
+        btn.dataset.value = item;
+
+        const textSpan = document.createElement('span');
+        textSpan.className = 'history-text';
+        textSpan.textContent = item;
+
+        const arrowSpan = document.createElement('span');
+        arrowSpan.className = 'history-arrow';
+        arrowSpan.setAttribute('aria-hidden', 'true');
+        arrowSpan.textContent = '↵';
+
+        btn.append(textSpan, arrowSpan);
+        fragment.appendChild(btn);
+      }
+      historyChips.replaceChildren(fragment);
     }
 
-    window.selectHistory = function(val) {
-      linkInput.value = val;
-      generateQR();
-    };
+    historyChips.addEventListener('click', (e) => {
+      const btn = e.target.closest('.history-item');
+      if (!btn) return;
+      linkInput.value = btn.dataset.value || '';
+      generateQR(true);
+      linkInput.focus();
+    });
 
     btnClearHistory.addEventListener('click', () => {
-      localStorage.removeItem(STORAGE_KEY);
+      try {
+        localStorage.removeItem(STORAGE_KEY_HISTORY);
+      } catch (e) {}
       renderHistory();
     });
 
-    function escapeHtml(str) {
-      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
-    function escapeAttr(str) {
-      return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-    }
-
-    // Inicializar historial
+    // Initialize history and URL query auto-generation
     renderHistory();
 
-    // Auto-generar si hay parámetro ?url= en la barra de direcciones
     const params = new URLSearchParams(window.location.search);
     const initialUrl = params.get('url') || params.get('link') || params.get('text');
     if (initialUrl) {
       linkInput.value = initialUrl;
-      generateQR();
+      generateQR(true);
     }
   </script>
 </body>
