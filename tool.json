@@ -6,5 +6,6 @@
   "icon": "qr",
   "command": "./run.sh",
   "port": 8003,
-  "health_path": "/"
+  "health_path": "/",
+  "cli": { "alias": "qr", "command": "./cli.sh" }
 }
