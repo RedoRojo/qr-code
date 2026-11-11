@@ -10,7 +10,8 @@ Fast, lightweight, and clean web tool to convert any URL or text into a high-res
   - **PNG** (High resolution, ideal for presentations or sharing).
   - **SVG** (Pure scalable vector graphics with zero quality loss).
 - 🔗 **Link Preview**: Quick button to open and verify the target URL in a new tab.
-- 🎨 **Instant Customization**: Adjust size, foreground color, and background color.
+- 🎨 **Instant Customization**: Adjust size, error correction level, foreground color, and background color.
+- 🌗 **Adaptive Theme**: Supports light and dark themes following your system preference with an optional manual toggle.
 - 🚀 **Zero Heavy Dependencies**: Runs 100% offline using Python's standard library.
 
 ## 🚀 Standalone Usage
@@ -19,4 +20,10 @@ Fast, lightweight, and clean web tool to convert any URL or text into a high-res
 ./run.sh
 ```
 
-The server will start on the port specified in `$PORT` (defaults to `http://127.0.0.1:8003`).
+The server will start on `http://127.0.0.1:8003` (configurable via `$HOST` and `$PORT`).
+
+## 🧪 Running Tests
+
+```bash
+python3 -m unittest discover -s tests -v
+```

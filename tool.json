@@ -1,7 +1,8 @@
 {
+  "id": "qr-code",
   "name": "Link to QR",
-  "description": "Convierte cualquier enlace o texto en código QR al instante, con descarga en PNG y SVG.",
-  "category": "Utilidades",
+  "description": "Convert any link or text into a QR code instantly, with PNG and SVG downloads.",
+  "category": "Utilities",
   "icon": "qr",
   "command": "./run.sh",
   "port": 8003,
